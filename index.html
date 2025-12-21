@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💎 Imperio Esmeralda</title>
-  
-  <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
+  <title>Club VIP</title> <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,13 +25,18 @@
     fbq('init', '1946841772846486'); 
     fbq('track', 'PageView');
   </script>
+
+  <style>
+    /* Ocultamos el logo hasta que JS decida qué texto poner */
+    #logoContainer { visibility: hidden; }
+  </style>
 </head>
 
 <body style="background-image: url('img/fondotrebol.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
   
   <h1 class="logo-text" id="logoContainer">
-    <span class="logo-emoji">💎</span>
-    <span class="logo-text-fill">IMPERIO ESMERALDA</span>
+    <span class="logo-emoji" id="brandEmoji">💎</span>
+    <span class="logo-text-fill" id="brandName">CLUB VIP</span>
   </h1>
 
   <div class="card">
@@ -58,7 +61,8 @@
   </div>
 
   <div class="info-externa">
-    <p id="minimoDeposito"></p> <p>EXPERIENCIA PREMIUM • ATENCIÓN 24/7 • ACCESO INMEDIATO Y SEGURO</p>
+    <p id="minimoDeposito"></p>
+    <p>EXPERIENCIA PREMIUM • ATENCIÓN 24/7 • ACCESO INMEDIATO Y SEGURO</p>
   </div>
 
   <div class="metodos-pago">
@@ -72,21 +76,69 @@
   </div>
 
   <script>
-    // Configuración del Sheet (Auditoría)
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbw9cPNvu9LoUam2EUVzkTFz8P41-qtjiwHTLEvkh9obDU5D2IcNif1Ep4ZjgMZ7CBBG/exec";
+    // ==========================================
+    // 🎭 CONFIGURACIÓN DE MARCAS (SISTEMA CAMALEÓN)
+    // ==========================================
+    const BRANDS = {
+      'imperio': { 
+        name: 'IMPERIO ESMERALDA', 
+        emoji: '💎',
+        color: '#00ff88' // Verde
+      },
+      'royal': { 
+        name: 'ROYAL CASINO', 
+        emoji: '👑',
+        color: '#ff006e' // Rojo/Rosa
+      },
+      'suerte': { 
+        name: 'SUERTE VIP', 
+        emoji: '🍀',
+        color: '#00d4ff' // Azul
+      },
+      'default': { 
+        name: 'IMPERIO ESMERALDA', // Tu marca principal por defecto
+        emoji: '💎',
+        color: '#00ff88'
+      }
+    };
 
+    // Función que aplica la marca al cargar
+    function applyBranding() {
+      const params = new URLSearchParams(window.location.search);
+      const brandKey = params.get('marca') || 'default'; // Busca ?marca=...
+      
+      // Si la marca existe en la lista, úsala. Si no, usa default.
+      const brand = BRANDS[brandKey] || BRANDS['default'];
+
+      document.getElementById('brandName').textContent = brand.name;
+      document.getElementById('brandEmoji').textContent = brand.emoji;
+      
+      // Cambiar color del texto (y sombra)
+      const textElement = document.getElementById('brandName');
+      textElement.style.color = brand.color;
+      textElement.style.textShadow = `0 0 20px ${brand.color}80`; // 80 es transparencia hex
+
+      // Mostrar el logo ya configurado
+      document.getElementById('logoContainer').style.visibility = 'visible';
+      document.title = brand.emoji + " " + brand.name;
+    }
+
+    // Ejecutar inmediatamente
+    applyBranding();
+
+    // ==========================================
+    // LÓGICA CORE (SHEET & REDIRECT)
+    // ==========================================
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbw9cPNvu9LoUam2EUVzkTFz8P41-qtjiwHTLEvkh9obDU5D2IcNif1Ep4ZjgMZ7CBBG/exec";
     let btn;
 
-    // --- FUNCIONES UTILITARIAS (COOKIES & FINGERPRINTING) ---
     function getCookie(name) {
       const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
       return match ? match[2] : "";
     }
-
     function setCookie(name, value) {
       document.cookie = `${name}=${value}; path=/; max-age=63072000`;
     }
-
     function ensureFBP() {
       let fbp = getCookie("_fbp");
       if (!fbp) {
@@ -95,7 +147,6 @@
       }
       return fbp;
     }
-
     function ensureFBC() {
       const fbclid = new URLSearchParams(window.location.search).get("fbclid");
       if (!fbclid) return "";
@@ -103,14 +154,12 @@
       setCookie("_fbc", fbc);
       return fbc;
     }
-
     function generateShortID() {
       const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
       let id = "";
       for (let i = 0; i < 5; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
       return id;
     }
-
     function getOrCreateClickID() {
       const stored = localStorage.getItem("click_id");
       if (stored) return stored;
@@ -118,63 +167,52 @@
       localStorage.setItem("click_id", id);
       return id;
     }
-
     function safeSend(payload) {
       try {
         const blob = new Blob([JSON.stringify(payload)], {type : 'text/plain'});
         navigator.sendBeacon(SHEET_URL, blob);
       } catch (e) {
         fetch(SHEET_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=UTF-8" },
-          body: JSON.stringify(payload)
+          method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload)
         });
       }
     }
 
-    // --- LÓGICA DE REDIRECCIÓN ---
     async function handleWhatsAppClick(event) {
       event?.preventDefault?.();
       if (btn.disabled) return;
-
       btn.disabled = true;
       btn.querySelector("span").textContent = "CONECTANDO..."; 
 
-      // 1. Captura de parámetros URL
       const urlParams = new URLSearchParams(window.location.search);
       const ad_name = urlParams.get('utm_content') || "Organico";
       const campaign_name = urlParams.get('utm_campaign') || "Desconocido";
       const source = urlParams.get('utm_source') || "facebook";
+      const marca = urlParams.get('marca') || "default"; // Pasamos la marca también
 
-      // 2. Generación de IDs
       const fbp = ensureFBP();
       const fbc = ensureFBC();
       const click_id = getOrCreateClickID();
       const event_id = "contact-" + click_id;
       const timestamp = new Date().toISOString();
 
-      // 3. Pixel Track
       if (typeof fbq !== "undefined") {
         fbq("track", "Contact", {}, { eventID: event_id });
       }
 
-      // 4. Envío a Sheet
       safeSend({ click_id, fbp, fbc, event_id, timestamp, ad_name, campaign_name });
 
-      // 5. Preparar URL para Keitaro
       const params = new URLSearchParams({
         click_id: click_id,
         fbp: fbp,
         fbc: fbc,
         ad_name: ad_name,
         campaign: campaign_name,
-        source: source
+        source: source,
+        marca: marca // Le avisamos a Keitaro qué marca era
       });
 
-      // 6. Redirección diferida
       setTimeout(() => {
-        // Redirige a la función Serverless que consultará la variable de entorno
         window.location.href = `/api/ir?${params.toString()}`;
       }, 500); 
     }
@@ -184,6 +222,5 @@
       if(btn) btn.addEventListener("click", handleWhatsAppClick);
     });
   </script>
-
 </body>
 </html>
