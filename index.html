@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Club VIP</title> <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
+  <title>Club VIP</title>
+  
+  <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,7 +79,7 @@
 
   <script>
     // ==========================================
-    // 🎭 CONFIGURACIÓN DE MARCAS (SISTEMA CAMALEÓN)
+    // 🎭 1. CONFIGURACIÓN DE MARCAS (SISTEMA CAMALEÓN)
     // ==========================================
     const BRANDS = {
       'imperio': { 
@@ -96,7 +98,7 @@
         color: '#00d4ff' // Azul
       },
       'default': { 
-        name: 'IMPERIO ESMERALDA', // Tu marca principal por defecto
+        name: 'IMPERIO ESMERALDA', 
         emoji: '💎',
         color: '#00ff88'
       }
@@ -107,31 +109,48 @@
       const params = new URLSearchParams(window.location.search);
       const brandKey = params.get('marca') || 'default'; // Busca ?marca=...
       
-      // Si la marca existe en la lista, úsala. Si no, usa default.
       const brand = BRANDS[brandKey] || BRANDS['default'];
 
       document.getElementById('brandName').textContent = brand.name;
       document.getElementById('brandEmoji').textContent = brand.emoji;
       
-      // Cambiar color del texto (y sombra)
       const textElement = document.getElementById('brandName');
       textElement.style.color = brand.color;
-      textElement.style.textShadow = `0 0 20px ${brand.color}80`; // 80 es transparencia hex
+      textElement.style.textShadow = `0 0 20px ${brand.color}80`;
 
-      // Mostrar el logo ya configurado
       document.getElementById('logoContainer').style.visibility = 'visible';
       document.title = brand.emoji + " " + brand.name;
     }
 
-    // Ejecutar inmediatamente
     applyBranding();
 
     // ==========================================
-    // LÓGICA CORE (SHEET & REDIRECT)
+    // ⚙️ 2. LÓGICA CORE: CARGA DE CONFIGURACIÓN DINÁMICA
     // ==========================================
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbw9cPNvu9LoUam2EUVzkTFz8P41-qtjiwHTLEvkh9obDU5D2IcNif1Ep4ZjgMZ7CBBG/exec";
+    
+    // Inicializamos variable vacía. Se llenará consultando a Vercel.
+    let SHEET_URL = ""; 
+
+    async function loadConfig() {
+      try {
+        // Pedimos al backend (api/config.js) la URL del Sheet de este cliente
+        const response = await fetch('/api/config');
+        const data = await response.json();
+        if (data.sheetUrl) {
+          SHEET_URL = data.sheetUrl;
+          console.log("✅ Configuración de Sheet cargada correctamente.");
+        }
+      } catch (error) {
+        console.error("❌ Error cargando configuración del Sheet:", error);
+      }
+    }
+
+    // Ejecutamos la carga inmediatamente
+    loadConfig();
+
     let btn;
 
+    // --- Funciones Auxiliares ---
     function getCookie(name) {
       const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
       return match ? match[2] : "";
@@ -167,7 +186,15 @@
       localStorage.setItem("click_id", id);
       return id;
     }
+
+    // --- Envío de Datos al Sheet (Protegido) ---
     function safeSend(payload) {
+      // Si la configuración no cargó todavía, no podemos enviar al Sheet
+      if (!SHEET_URL) {
+        console.warn("⚠️ Sheet URL no disponible. No se guardó el lead en Excel.");
+        return;
+      }
+
       try {
         const blob = new Blob([JSON.stringify(payload)], {type : 'text/plain'});
         navigator.sendBeacon(SHEET_URL, blob);
@@ -178,6 +205,7 @@
       }
     }
 
+    // --- Manejo del Clic ---
     async function handleWhatsAppClick(event) {
       event?.preventDefault?.();
       if (btn.disabled) return;
@@ -188,7 +216,7 @@
       const ad_name = urlParams.get('utm_content') || "Organico";
       const campaign_name = urlParams.get('utm_campaign') || "Desconocido";
       const source = urlParams.get('utm_source') || "facebook";
-      const marca = urlParams.get('marca') || "default"; // Pasamos la marca también
+      const marca = urlParams.get('marca') || "default"; 
 
       const fbp = ensureFBP();
       const fbc = ensureFBC();
@@ -209,7 +237,7 @@
         ad_name: ad_name,
         campaign: campaign_name,
         source: source,
-        marca: marca // Le avisamos a Keitaro qué marca era
+        marca: marca 
       });
 
       setTimeout(() => {
