@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Club VIP</title>
-  
+   
   <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,13 +29,12 @@
   </script>
 
   <style>
-    /* Ocultamos el logo hasta que JS decida qué texto poner */
     #logoContainer { visibility: hidden; }
   </style>
 </head>
 
 <body style="background-image: url('img/fondotrebol.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
-  
+   
   <h1 class="logo-text" id="logoContainer">
     <span class="logo-emoji" id="brandEmoji">💎</span>
     <span class="logo-text-fill" id="brandName">CLUB VIP</span>
@@ -79,7 +78,7 @@
 
   <script>
     // ==========================================
-    // 🎲 0. CONFIGURACIÓN DEL ROTADOR DE WHATSAPP
+    // 🎲 0. ROTADOR DE WHATSAPP
     // ==========================================
     const WHATSAPP_NUMBERS = [
       "5492235568815",
@@ -94,31 +93,17 @@
     }
 
     // ==========================================
-    // 🎭 1. CONFIGURACIÓN DE MARCAS (SISTEMA CAMALEÓN)
+    // 🎭 1. CONFIGURACIÓN DE MARCAS
     // ==========================================
     const BRANDS = {
-      'imperio': { 
-        name: 'IMPERIO ESMERALDA', 
-        emoji: '💎',
-        color: '#00ff88' // Verde Neón
-      },
-      'rubi': { 
-        name: 'IMPERIO RUBÍ', 
-        emoji: '❤️', 
-        color: '#ff3131' // Rojo Neón Intenso
-      },
-      'default': { 
-        name: 'IMPERIO ESMERALDA', 
-        emoji: '💎',
-        color: '#00ff88'
-      }
+      'imperio': { name: 'IMPERIO ESMERALDA', emoji: '💎', color: '#00ff88' },
+      'rubi': { name: 'IMPERIO RUBÍ', emoji: '❤️', color: '#ff3131' },
+      'default': { name: 'IMPERIO ESMERALDA', emoji: '💎', color: '#00ff88' }
     };
 
-    // Función que aplica la marca al cargar
     function applyBranding() {
       const params = new URLSearchParams(window.location.search);
-      const brandKey = params.get('marca') || 'default'; // Busca ?marca=...
-      
+      const brandKey = params.get('marca') || 'default';
       const brand = BRANDS[brandKey] || BRANDS['default'];
 
       document.getElementById('brandName').textContent = brand.name;
@@ -135,28 +120,11 @@
     applyBranding();
 
     // ==========================================
-    // ⚙️ 2. LÓGICA CORE: CARGA DE CONFIGURACIÓN DINÁMICA
+    // ⚙️ 2. CONEXIÓN DIRECTA CON EXCEL
     // ==========================================
     
-    // Inicializamos variable vacía. Se llenará consultando a Vercel.
-    let SHEET_URL = ""; 
-
-    async function loadConfig() {
-      try {
-        // Pedimos al backend (api/config.js) la URL del Sheet de este cliente
-        const response = await fetch('/api/config');
-        const data = await response.json();
-        if (data.sheetUrl) {
-          SHEET_URL = data.sheetUrl;
-          console.log("✅ Configuración de Sheet cargada correctamente.");
-        }
-      } catch (error) {
-        console.error("❌ Error cargando configuración del Sheet:", error);
-      }
-    }
-
-    // Ejecutamos la carga inmediatamente
-    loadConfig();
+    // 👇👇👇 ¡PEGA AQUÍ TU URL DE APPS SCRIPT! 👇👇👇
+    const SHEET_URL = "https://script.google.com/macros/s/PEGAR_AQUI_LA_URL_LARGA/exec"; 
 
     let btn;
 
@@ -197,38 +165,37 @@
       return id;
     }
 
-    // --- Envío de Datos al Sheet (Protegido) ---
+    // --- Envío de Datos al Sheet (Puente Invisible) ---
     function safeSend(payload) {
-      if (!SHEET_URL) {
-        console.warn("⚠️ Sheet URL no disponible. No se guardó el lead en Excel.");
+      if (!SHEET_URL || SHEET_URL.includes("PEGAR_AQUI")) {
+        console.warn("⚠️ URL de Sheet no configurada.");
         return;
       }
-
       try {
         const blob = new Blob([JSON.stringify(payload)], {type : 'text/plain'});
         navigator.sendBeacon(SHEET_URL, blob);
       } catch (e) {
         fetch(SHEET_URL, {
-          method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(payload)
+          method: "POST", mode: "no-cors", 
+          headers: { "Content-Type": "text/plain;charset=UTF-8" }, 
+          body: JSON.stringify(payload)
         });
       }
     }
 
-    // --- Manejo del Clic con Rotador ---
+    // --- Manejo del Clic ---
     async function handleWhatsAppClick(event) {
       event?.preventDefault?.();
       if (btn.disabled) return;
+      
       btn.disabled = true;
       btn.querySelector("span").textContent = "CONECTANDO..."; 
 
-      // 1. Elegimos el número al azar
       const selectedPhone = getRandomWhatsApp();
-      console.log("🎲 Número asignado por rotador:", selectedPhone);
 
       const urlParams = new URLSearchParams(window.location.search);
       const ad_name = urlParams.get('utm_content') || "Organico";
       const campaign_name = urlParams.get('utm_campaign') || "Desconocido";
-      const source = urlParams.get('utm_source') || "facebook";
       const marca = urlParams.get('marca') || "default"; 
 
       const fbp = ensureFBP();
@@ -237,30 +204,23 @@
       const event_id = "contact-" + click_id;
       const timestamp = new Date().toISOString();
 
+      // Pixel
       if (typeof fbq !== "undefined") {
         fbq("track", "Contact", {}, { eventID: event_id });
       }
 
-      // 2. Enviamos al Sheet también el número asignado (phone)
+      // 1. Enviar datos al Excel (Invisible)
       safeSend({ 
-        click_id, fbp, fbc, event_id, timestamp, ad_name, campaign_name, 
-        phone: selectedPhone 
+        click_id, fbp, fbc, event_id, timestamp, 
+        ad_name, campaign_name, marca, phone: selectedPhone 
       });
 
-      // 3. Preparamos los parámetros para la API de redirección
-      const params = new URLSearchParams({
-        click_id: click_id,
-        fbp: fbp,
-        fbc: fbc,
-        ad_name: ad_name,
-        campaign: campaign_name,
-        source: source,
-        marca: marca,
-        phone: selectedPhone // <--- Importante: Le pasamos el número elegido al backend
-      });
-
+      // 2. Abrir WhatsApp (Mensaje Limpio)
+      // Como ya guardamos los datos, no hace falta ensuciar el mensaje.
+      const message = `Hola! Quiero mi usuario. (ID: ${click_id})`;
+      
       setTimeout(() => {
-        window.location.href = `/api/ir?${params.toString()}`;
+         window.location.href = `https://wa.me/${selectedPhone}?text=${encodeURIComponent(message)}`;
       }, 500); 
     }
 
