@@ -1,26 +1,32 @@
 export default function handler(req, res) {
-  // 1. Obtener la URL de destino desde las Variables de Entorno de Vercel
-  // Cada proyecto de Vercel (Cliente A, Cliente B) tendrá un valor distinto aquí.
-  const keitaroUrl = process.env.KEITARO_URL;
+  try {
+    // 1. RECIBIMOS EL NÚMERO ELEGIDO POR EL INDEX.HTML
+    // El index manda algo como: /api/ir?phone=549223...
+    const { phone } = req.query;
 
-  // 2. Validación de Seguridad
-  // Si te olvidaste de configurar la variable en Vercel, mandamos a Google para no mostrar error 500
-  if (!keitaroUrl) {
-    console.error("[ERROR] Falta la variable de entorno KEITARO_URL");
-    return res.redirect(302, 'https://www.google.com'); 
+    // 2. FALLBACK (RED DE SEGURIDAD)
+    // Si por alguna razón extraña el link no trae número, usamos uno fijo de emergencia.
+    // (Pon aquí tu número principal o el que menos riesgo tenga)
+    const destinationPhone = phone || "5492235568815"; 
+
+    // 3. MENSAJE PREDETERMINADO
+    // El mensaje que aparecerá escrito en el WhatsApp del cliente.
+    const message = "Hola! Quiero mi usuario";
+    
+    // Codificamos el mensaje para que funcione en la URL (cambia espacios por %20, etc.)
+    const encodedMessage = encodeURIComponent(message);
+
+    // 4. CONSTRUIMOS LA URL FINAL DE WHATSAPP
+    // Pegamos el número y el mensaje.
+    const finalUrl = `https://wa.me/${destinationPhone}?text=${encodedMessage}`;
+
+    // 5. REDIRECCIÓN
+    // Enviamos al usuario a su destino final.
+    res.redirect(307, finalUrl);
+
+  } catch (error) {
+    // Si todo falla, redirigir al número de emergencia
+    console.error(error);
+    res.redirect(307, "https://wa.me/5492235568815");
   }
-
-  // 3. Preservar los parámetros (Click ID, FBP, FBC, UTMs)
-  // req.query ya trae todos los parámetros que el index.html le pasó (click_id=xyz&fbp=...)
-  // Los convertimos a string para pegárselos a la URL de destino.
-  const queryParams = new URLSearchParams(req.query).toString();
-
-  // 4. Construir la URL Final
-  // Si ya hay params, los concatenamos.
-  const finalUrl = queryParams ? `${keitaroUrl}?${queryParams}` : keitaroUrl;
-
-  // 5. Redirección
-  // Usamos 302 (Found) o 307 (Temporary Redirect) para que el navegador NO guarde esto en caché.
-  // Queremos que siempre ejecute el script por si cambiamos la URL de Keitaro mañana.
-  res.redirect(307, finalUrl);
 }
