@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>💎 Imperio Esmeralda | Acceso VIP</title>
+  <title>💎 Acceso VIP | Habilitado</title>
 
   <meta name="facebook-domain-verification" content="qx1zho2wixswe5pr0ill7z3aecxjcp" />
 
@@ -17,12 +17,11 @@
   <link rel="icon" type="image/png" href="img/favicon.png">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      background: radial-gradient(circle at center, #1a2a33 0%, #0f171e 100%);
+      /* Fondo más vibrante y moderno */
+      background: radial-gradient(circle at center, #112d22 0%, #000000 100%);
       color: white;
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -36,63 +35,82 @@
     }
     
     .container {
-      width: 90%;
-      max-width: 450px;
-      padding: 15px 0;
+      width: 92%;
+      max-width: 420px;
+      padding: 20px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
     }
 
-    /* --- LOGO SUPERIOR --- */
-    .brand-header {
-      font-size: 1.1rem;
+    /* --- HEADER TIPO "ESTADO DEL SISTEMA" (Seguro y Urgente) --- */
+    .system-status {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid #00ff88;
       color: #00ff88;
-      font-weight: 800;
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 10px;
-      text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+    
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #00ff88;
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
     }
 
-    /* --- FOTO CORREGIDA (NO TAPA EL BOTÓN) --- */
+    /* --- FOTO INTEGRADA --- */
+    .hero-container {
+      position: relative;
+      margin-bottom: 5px;
+    }
+    
     .hero-image {
       width: 100%;
-      max-width: 280px; /* Ancho máximo controlado */
+      max-width: 260px; /* Tamaño ideal para móvil */
       height: auto;
-      max-height: 280px; /* ALTO MÁXIMO PARA QUE ENTRE EL BOTÓN */
-      object-fit: cover; /* Recorta la foto si sobra, no la estira */
-      border-radius: 20px;
-      border: 3px solid #00ff88;
-      box-shadow: 0 0 25px rgba(0, 255, 136, 0.2);
-      margin-bottom: 15px;
+      border-radius: 25px;
+      /* Borde degradado sutil */
+      border: 3px solid rgba(255, 255, 255, 0.1); 
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
       display: block;
     }
 
-    /* --- TEXTOS --- */
+    /* --- TEXTOS IMPACTANTES --- */
     .headline {
-      font-size: 1.6rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin: 5px 0;
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 15px 0 5px 0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
     .sub-headline {
-      font-size: 0.95rem;
-      color: #ccc;
+      font-size: 1rem;
+      color: #cfcfcf;
       margin-bottom: 20px;
       line-height: 1.4;
       padding: 0 10px;
+      font-weight: 400;
     }
 
-    /* --- BOTÓN WHATSAPP --- */
-    .popup-button {
-      background: #25D366; /* Verde WhatsApp Oficial */
+    /* --- BOTÓN WHATSAPP MEJORADO --- */
+    .whatsapp-btn {
+      background: linear-gradient(90deg, #25D366 0%, #128C7E 100%);
       color: white;
       border: none;
       padding: 16px 20px;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 800;
       border-radius: 50px;
       cursor: pointer;
@@ -100,71 +118,46 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px; /* Espacio entre texto e icono */
-      box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
-      animation: pulse 2s infinite; /* Latido para llamar la atención */
-      text-transform: uppercase;
+      gap: 12px;
+      box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+      animation: pulse-shadow 2s infinite;
       text-decoration: none;
       -webkit-tap-highlight-color: transparent;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .popup-button:active {
-      transform: scale(0.96);
-    }
+    .whatsapp-btn:active { transform: scale(0.96); }
 
-    /* Icono SVG dentro del botón */
-    .btn-icon {
-      width: 28px;
-      height: 28px;
-      fill: white;
-    }
+    .whatsapp-icon { width: 32px; height: 32px; fill: white; }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); transform: scale(1); }
-      50% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); transform: scale(1.02); }
-      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); transform: scale(1); }
+    @keyframes pulse-shadow {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
+    @keyframes blink { 50% { opacity: 0.3; } }
 
-    /* --- PRUEBA SOCIAL --- */
+    /* --- PRUEBA SOCIAL REALISTA --- */
     .social-proof {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #00ff88;
-      background: rgba(0, 255, 136, 0.1);
-      padding: 5px 15px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 6px 15px;
       border-radius: 20px;
-      margin-bottom: 25px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      margin-bottom: 30px;
+      display: inline-block;
+      border: 1px solid rgba(0, 255, 136, 0.2);
     }
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: #00ff88;
-      border-radius: 50%;
-      animation: blink 1s infinite;
-    }
-    @keyframes blink { 50% { opacity: 0.4; } }
 
     /* --- MÉTODOS DE PAGO --- */
     .metodos-pago {
-      margin-top: auto; /* Empuja esto al fondo si sobra espacio */
-      opacity: 0.7;
+      margin-top: auto;
+      opacity: 0.6;
       padding-bottom: 20px;
     }
-    .metodos-pago p {
-      font-size: 0.7rem;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    .iconos-pago img {
-      height: 22px;
-      margin: 0 4px;
-      background: white;
-      padding: 2px;
-      border-radius: 3px;
-    }
+    .metodos-pago p { font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 8px; color: #aaa; }
+    .iconos-pago img { height: 20px; margin: 0 6px; background: #fff; padding: 2px; border-radius: 3px; }
   </style>
 
   <script>
@@ -186,11 +179,14 @@
   
   <div class="container">
     
-    <div class="brand-header">
-      💎 IMPERIO ESMERALDA
+    <div class="system-status">
+      <div class="pulse-dot"></div>
+      <span>ACCESO VIP: DISPONIBLE</span>
     </div>
 
-    <img src="img/chica-feliz.png" alt="Acceso Listo" class="hero-image">
+    <div class="hero-container">
+      <img src="img/chica-feliz.png" alt="Usuario Feliz" class="hero-image">
+    </div>
 
     <h1 class="headline">
       Tu acceso está listo.<br>
@@ -201,16 +197,15 @@
       Hacé como miles de personas que ya descubrieron la experiencia. Atención personalizada y retiros rápidos. 👇
     </p>
 
-    <button class="popup-button" id="whatsappButton">
-      <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/>
+    <button class="whatsapp-btn" id="whatsappButton">
+      <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.149-.67.149-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.123-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
       </svg>
       <span>RECLAMAR MI ACCESO 🎁</span>
     </button>
 
     <div class="social-proof">
-      <div class="dot"></div>
-      <span>+12 personas ingresaron recién</span>
+      🔥 +163 personas ingresaron en los últimos 5 min.
     </div>
 
     <div class="metodos-pago">
@@ -225,7 +220,7 @@
   </div>
 
   <script>
-    // --- 🎲 CONFIGURACIÓN DE NÚMEROS ROTATIVOS 🎲 ---
+    // --- 🎲 ROTADOR DE WHATSAPP 🎲 ---
     const WHATSAPP_ROTATOR = [
       "5491178534949",
       "5492233489512",
@@ -241,11 +236,9 @@
       const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
       return match ? match[2] : "";
     }
-
     function setCookie(name, value) {
       document.cookie = `${name}=${value}; path=/; max-age=63072000`;
     }
-
     function ensureFBP() {
       let fbp = getCookie("_fbp");
       if (!fbp) {
@@ -254,7 +247,6 @@
       }
       return fbp;
     }
-
     function ensureFBC() {
       const fbclid = new URLSearchParams(window.location.search).get("fbclid");
       if (!fbclid) return "";
@@ -262,14 +254,12 @@
       setCookie("_fbc", fbc);
       return fbc;
     }
-
     function generateShortID() {
       const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
       let id = "";
       for (let i = 0; i < 5; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
       return id;
     }
-
     function getOrCreateClickID() {
       const stored = localStorage.getItem("click_id");
       if (stored) return stored;
@@ -277,14 +267,12 @@
       localStorage.setItem("click_id", id);
       return id;
     }
-
     function safeSend(payload) {
       try {
         navigator.sendBeacon(SHEET_URL, JSON.stringify(payload));
       } catch (e) {
         fetch(SHEET_URL, {
-          method: "POST",
-          mode: "no-cors",
+          method: "POST", mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(payload)
         });
@@ -293,15 +281,12 @@
 
     async function handleWhatsAppClick(event) {
       event?.preventDefault?.();
-
       if (btn.disabled) return;
 
       btn.disabled = true;
-      // Pequeño cambio visual al hacer click
       btn.style.opacity = "0.7";
-      btn.querySelector("span").textContent = "ABRIENDO WHATSAPP...";
+      btn.querySelector("span").textContent = "ABRIENDO...";
 
-      // 1. CAPTURAR DATOS
       const urlParams = new URLSearchParams(window.location.search);
       const ad_name = urlParams.get('utm_content') || "Organico/Desconocido";
       const campaign_name = urlParams.get('utm_campaign') || "Desconocido";
@@ -312,22 +297,17 @@
       const event_id = "contact-" + click_id;
       const timestamp = new Date().toISOString();
 
-      // Disparo del Pixel
       if (typeof fbq !== "undefined") {
         fbq("track", "Contact", {}, { eventID: event_id });
       }
 
-      // 2. ENVÍO AL EXCEL
       safeSend({ click_id, fbp, fbc, event_id, timestamp, ad_name, campaign_name });
 
-      // 3. SELECCIÓN DE WHATSAPP
       const randomIndex = Math.floor(Math.random() * WHATSAPP_ROTATOR.length);
       const selectedNumber = WHATSAPP_ROTATOR[randomIndex];
 
-      // 4. MENSAJE MEJORADO
+      // MENSAJE PRECARGADO
       const message = `Hola! 👋 Vi el video y quiero reclamar mi acceso. (Cód: ${click_id})`;
-      
-      // Abrir WhatsApp
       window.open(`https://wa.me/${selectedNumber}?text=${encodeURIComponent(message)}`, "_blank");
 
       setTimeout(() => {
